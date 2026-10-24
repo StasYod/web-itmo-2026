@@ -118,12 +118,13 @@ public class FrontServlet extends HttpServlet {
         Class<?>[] parameterTypes = method.getParameterTypes();
         Object[] parameters = new Object[parameterTypes.length];
         Map<String, Object> view = new HashMap<>();
+        HashMap<Class<?>, Object> args = new HashMap<>();
+        args.put(HttpServletRequest.class, request);
+        args.put(Map.class, view);
 
         for (int i = 0; i < parameterTypes.length; i++) {
-            if (parameterTypes[i] == HttpServletRequest.class) {
-                parameters[i] = request;
-            } else if (parameterTypes[i] == Map.class) {
-                parameters[i] = view;
+            if (args.containsKey(parameterTypes[i])) {
+                parameters[i] = args.get(parameterTypes[i]);
             } else {
                 throw new  ServletException("Unsupported parameter type [" + parameterTypes[i] + "]");
             }

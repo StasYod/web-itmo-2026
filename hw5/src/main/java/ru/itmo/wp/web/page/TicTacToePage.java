@@ -6,6 +6,12 @@ import java.util.Map;
 @SuppressWarnings({"unused", "RedundantSuppression"})
 public class TicTacToePage {
     private static final String STATE_ATTRIBUTE = "ticTacToeState";
+    public enum Phase {
+        RUNNING,
+        DRAW,
+        WON_X,
+        WON_O,
+    }
 
     public void action(HttpServletRequest request, Map<String, Object> view) {
         State state = getState(request);
@@ -23,7 +29,7 @@ public class TicTacToePage {
             }
         }
 
-        if (cell != null && state.getPhase().equals("RUNNING")) {
+        if (cell != null && state.getPhase() == Phase.RUNNING) {
             int row = cell.charAt(5) - '0';
             int col = cell.charAt(6) - '0';
 
@@ -32,9 +38,9 @@ public class TicTacToePage {
                 state.getCells()[row][col] = mark;
 
                 if (state.hasWon(mark)) {
-                    state.phase = state.isCrossesMove() ? "WON_X" : "WON_O";
+                    state.phase = state.isCrossesMove() ? Phase.WON_X : Phase.WON_O;
                 } else if (state.isFull()) {
-                    state.phase = "DRAW";
+                    state.phase = Phase.DRAW;
                 } else {
                     state.crossesMove = !state.isCrossesMove();
                 }
@@ -66,7 +72,7 @@ public class TicTacToePage {
         private final int size = 3;
         private final String[][] cells = new String[size][size];
         private boolean crossesMove = true;
-        private String phase = "RUNNING";
+        private Phase phase = Phase.RUNNING;
 
         public int getSize() {
             return size;
@@ -80,21 +86,19 @@ public class TicTacToePage {
             return crossesMove;
         }
 
-        public String getPhase() {
+        public Phase getPhase() {
             return phase;
+        }
+
+        private boolean checkLine(String mark, String line, int index) {
+            return mark.equals(cells[line.equals("X")?index:0][line.equals("Y")?index:0])
+                    && mark.equals(cells[line.equals("X")?index:1][line.equals("Y")?index:1])
+                    && mark.equals(cells[line.equals("X")?index:2][line.equals("Y")?index:2]);
         }
 
         private boolean hasWon(String mark) {
             for (int i = 0; i < size; i++) {
-                if (mark.equals(cells[i][0])
-                        && mark.equals(cells[i][1])
-                        && mark.equals(cells[i][2])) {
-                    return true;
-                }
-
-                if (mark.equals(cells[0][i])
-                        && mark.equals(cells[1][i])
-                        && mark.equals(cells[2][i])) {
+                if (checkLine(mark, "X", i) || checkLine(mark, "Y", i)) {
                     return true;
                 }
             }
