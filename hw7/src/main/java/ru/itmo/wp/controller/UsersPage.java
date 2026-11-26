@@ -3,19 +3,41 @@ package ru.itmo.wp.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import ru.itmo.wp.domain.User;
 import ru.itmo.wp.service.UserService;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class UsersPage extends Page {
     private final UserService userService;
+    private final HttpSession httpSession;
 
-    public UsersPage(UserService userService) {
+    public UsersPage(UserService userService, HttpSession httpSession) {
         this.userService = userService;
+        this.httpSession = httpSession;
     }
 
     @GetMapping("/users/all")
     public String users(Model model) {
         model.addAttribute("users", userService.findAll());
         return "UsersPage";
+    }
+
+    @PostMapping("/users/disable")
+    public String setDisable(
+            @RequestParam long userId,
+            @RequestParam boolean disabled,
+            HttpSession session) {
+        User user = getUser(httpSession);
+
+        if (user == null || !user.isAdmin()) {
+            return "redirect:/users/all";
+        }
+
+        userService.setDisabled(userId, disabled);
+        return "redirect:/users/all";
     }
 }
