@@ -29,21 +29,30 @@
                     <td class="creationTime">${userIter.creationTime}</td>
                     <#if user?? && user.admin>
                         <td>
-                            <form method="post" action="/users/disable">
-                                <input type="hidden" name="userId" value="${userIter.id}">
-
-                                <#if userIter.disabled>
-                                    <input type="hidden" name="disabled" value="false">
-                                    <input type="submit" value="Enable">
-                                <#else>
-                                    <input type="hidden" name="disabled" value="true">
-                                    <input type="submit" value="Disable">
-                                </#if>
-                            </form>
+                            <#if userIter.disabled>
+                                <button type="button" onclick="setDisabled(${userIter.id}, false)">
+                                    Enable
+                                </button>
+                            <#else>
+                                <button type="button" onclick="setDisabled(${userIter.id}, true)">
+                                    Disable
+                                </button>
+                            </#if>
                         </td>
                     </#if>
                 </tr>
                 </#list>
+                <form id="disable-form" method="post" action="/users/disable">
+                    <input type="hidden" id="user-id" name="userId">
+                    <input type="hidden" id="disabled" name="disabled">
+                </form>
+                <script>
+                    function setDisabled(userId, disabled) {
+                        document.getElementById("user-id").value = userId;
+                        document.getElementById("disabled").value = disabled;
+                        document.getElementById("disable-form").submit();
+                    }
+                </script>
             </#if>
             </tbody>
         </table>
