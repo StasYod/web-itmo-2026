@@ -138,3 +138,30 @@ aside section .footer a:after {
     background-color: var(--message-background-color);
     text-align: center;
 }
+
+.comments .title {
+    font-size: 1.25rem;
+    color: var(--caption-color);
+    padding-bottom: 0.5rem;
+}
+
+.addComment form textarea {
+    width: 100%;
+    resize: vertical;
+}
+
+.addComment form button {
+    margin-bottom: 0.5rem;
+}
+
+.comments .comment .username {
+    font-size: 1.15rem;
+    color: var(--caption-color);
+}
+
+.comments .comment .time {
+    font-size: 0.75rem;
+    color: #888;
+    margin-top: 0.1rem;
+    margin-bottom: 0.5rem;
+}

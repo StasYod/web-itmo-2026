@@ -27,6 +27,17 @@
                     </div>
                     <@c.error "post.text"/>
                 </div>
+                <div class="field">
+                    <div class="name">
+                        <label for="tagsInput">Tags</label>
+                    </div>
+                    <div class="value">
+                        <input id="tagsInput" name="tagsInput" value="${tags!}"/>
+                    </div>
+                    <#if tagsError??>
+                        <div class="error">${tagsError}</div>
+                    </#if>
+                </div>
                 <div class="button-field">
                     <input type="submit" value="Write">
                 </div>
