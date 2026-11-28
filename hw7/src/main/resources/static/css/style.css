@@ -115,6 +115,8 @@ aside section .header:before {
 
 aside section .body {
     padding: 1rem;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
 }
 
 aside section .footer {

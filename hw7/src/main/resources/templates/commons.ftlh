@@ -47,9 +47,7 @@
                     <div class="header">
                         Notice
                     </div>
-                    <div class="body">
-                        ${notice.content}
-                    </div>
+                    <div class="body">${notice.content}</div>
                     <div class="footer">
                         <a>${notice.creationTime?string("yyyy-MM-dd HH:mm:ss")}</a>
                     </div>
